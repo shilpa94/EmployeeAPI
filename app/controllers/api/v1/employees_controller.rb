@@ -21,6 +21,32 @@ class Api::V1::EmployeesController < ApplicationController
   end
 
   api!
+  param :firstname, String, desc: 'Firstname', required: true
+  param :lastname, String, desc: 'Lastname', required: true
+  param :email, String, desc: 'Email', required: true
+  param :gender, String, desc: 'Gender', required: true
+  param :phone, String, desc: 'Phone', required: true
+  param :address, String, desc: 'Address', required: true
+  param :employee_id, String, desc: 'Employee ID', required: true
+  param :picture, String, desc: 'Picture', required: true
+  param :DOB, String, desc: 'DOB', required: true
+  description 'Create Employee'
+  example "
+  {
+    message:{
+      notice: Employee created
+    }
+  }"
+  def create
+    @employee = Employee.new(employee_params)
+    if @employee.save
+      render json: { status: true, notice: 'Employee was successfully created.'}
+    else
+      render json: { status: false, notice: @employee.errors }
+    end
+  end
+
+  api!
   param :firstname, String, desc: 'Firstname'
   param :lastname, String, desc: 'Lastname'
   param :email, String, desc: 'Email'
