@@ -5,6 +5,5 @@ Rails.application.routes.draw do
       resources :employees
     end
   end
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  # root 'employees#index'
+  # root 'apipie_apipie_path(v1)'
 end

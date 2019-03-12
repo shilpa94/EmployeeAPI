@@ -8,6 +8,7 @@ class Api::V1::EmployeesController < ApplicationController
   end
 
   api!
+  param :search_text, String, desc: 'Search Employees', required: false
   description 'employee list'
   example "
   {
@@ -16,7 +17,14 @@ class Api::V1::EmployeesController < ApplicationController
     }
   }"
   def index
-    @employee = Employee.all
+    search_text = params[:search_text]
+    if search_text.present?
+      @employee = Employee.search {
+        fulltext search_text
+      }.results
+    else
+      @employee = Employee.all
+    end
     render 'employees/index.rabl'
   end
 
@@ -28,7 +36,8 @@ class Api::V1::EmployeesController < ApplicationController
   param :phone, String, desc: 'Phone', required: true
   param :address, String, desc: 'Address', required: true
   param :employee_id, String, desc: 'Employee ID', required: true
-  param :picture, String, desc: 'Picture', required: true
+  param :department, String, desc: 'Department', required: true
+  # param :picture, String, desc: 'Picture', required: true
   param :DOB, String, desc: 'DOB', required: true
   description 'Create Employee'
   example "
@@ -54,7 +63,7 @@ class Api::V1::EmployeesController < ApplicationController
   param :phone, String, desc: 'Phone'
   param :address, String, desc: 'Address'
   param :employee_id, String, desc: 'Employee ID'
-  param :picture, String, desc: 'Picture'
+  # param :picture, String, desc: 'Picture'
   param :DOB, String, desc: 'DOB'
   description 'Update Employee'
   example "
