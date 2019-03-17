@@ -9,6 +9,9 @@ class Api::V1::EmployeesController < ApplicationController
 
   api!
   param :search_text, String, desc: 'Search Employees', required: false
+  param :gender, String, desc: 'Gender', required: false
+  param :first_name, String, desc: 'firstname', required: false
+  param :page, String, desc: 'Page Number', required: false
   description 'employee list'
   example "
   {
@@ -17,13 +20,23 @@ class Api::V1::EmployeesController < ApplicationController
     }
   }"
   def index
+    @page = params[:page] || 1
     search_text = params[:search_text]
-    if search_text.present?
+    gender = params[:gender]
+    first_name = params[:first_name]
+    if gender.present? || first_name.present?
+      @employee = Employee.search {
+        fulltext gender, :fields => :gender 
+        fulltext first_name, :fields => :firstname
+        paginate :page => params[:page], per_page: 3
+      }.results
+    elsif search_text.present?
       @employee = Employee.search {
         fulltext search_text
+        paginate :page => params[:page], per_page: 3
       }.results
     else
-      @employee = Employee.all
+      @employee = Employee.all.page(@page).per(3)
     end
     render 'employees/index.rabl'
   end

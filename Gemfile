@@ -16,7 +16,9 @@ gem 'net-ssh'
 # Solr search Engine
 gem 'sunspot_rails'
 gem 'sunspot_solr'
+gem 'progress_bar'
 
+gem 'kaminari'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
